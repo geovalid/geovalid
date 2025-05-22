@@ -11,3 +11,5 @@ set "Scripts_dir=%bin_dir%\Scripts"
 set "PATH=%Scripts_dir%;%bin_dir%;%PATH%"
 
 python main.py
+
+pause

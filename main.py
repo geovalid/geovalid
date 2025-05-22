@@ -330,64 +330,12 @@ add_line("   • Create backup copies before processing")
 add_line("   • Validate results after any transformations")
 add_line("   • Consider creating a mosaic for seamless coverage")
 add_line("   • Document all processing steps for reproducibility")
-
-# Generate CSV report
-csv_path = os.path.join(folder, f"quality-report-data-{timestamp}.csv")
-try:
-    with open(csv_path, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(['Filename', 'Width', 'Height', 'Bands', 'Data_Type', 'CRS', 'Pixel_Size_X', 'Pixel_Size_Y', 
-                        'Bounds_Left', 'Bounds_Bottom', 'Bounds_Right', 'Bounds_Top', 'NoData_Value', 
-                        'File_Size_MB', 'Min_Value', 'Max_Value', 'Mean_Value', 'Std_Value', 'Valid_Pixels', 'Coverage_Percent'])
-        
-        for filename in geotiff_files:
-            filepath = os.path.join(folder, filename)
-            try:
-                with rasterio.open(filepath) as src:
-                    transform = src.transform
-                    bounds = src.bounds
-                    file_size = os.path.getsize(filepath) / (1024 * 1024)
-                    
-                    # Get band statistics
-                    try:
-                        band_data = src.read(1, masked=True)
-                        if band_data.compressed().size > 0:
-                            valid_data = band_data.compressed()
-                            min_val = float(np.min(valid_data))
-                            max_val = float(np.max(valid_data))
-                            mean_val = float(np.mean(valid_data))
-                            std_val = float(np.std(valid_data))
-                            valid_pixels = int(valid_data.size)
-                            coverage_pct = (valid_data.size/band_data.size)*100
-                        else:
-                            min_val = max_val = mean_val = std_val = valid_pixels = coverage_pct = 'N/A'
-                    except:
-                        min_val = max_val = mean_val = std_val = valid_pixels = coverage_pct = 'Error'
-                    
-                    writer.writerow([
-                        filename, src.width, src.height, src.count, src.dtypes[0],
-                        src.crs.to_string() if src.crs else 'No CRS',
-                        abs(transform.a), abs(transform.e),
-                        bounds.left, bounds.bottom, bounds.right, bounds.top,
-                        src.nodata if src.nodata is not None else 'None',
-                        f"{file_size:.2f}", min_val, max_val, mean_val, std_val, valid_pixels, coverage_pct
-                    ])
-            except Exception as e:
-                writer.writerow([filename, 'Error', 'Error', 'Error', 'Error', 'Error', 'Error', 'Error',
-                               'Error', 'Error', 'Error', 'Error', 'Error', 'Error', 'Error', 'Error', 'Error', 'Error', 'Error', str(e)])
-    
-    add_line("")
-    add_line(f"Detailed CSV report saved: {csv_path}")
-    
-except Exception as e:
-    add_line(f"Error creating CSV report: {str(e)}")
+add_line("")
 
 c.drawText(text)
 c.save()
 
 print(f"Quality Report generated: {path}")
-if 'csv_path' in locals():
-    print(f"CSV Report generated: {csv_path}")
 print(f"Total files analyzed: {len(geotiff_files)}")
 print(f"Quality issues found: {len(quality_issues)}")
 

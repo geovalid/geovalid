@@ -1,0 +1,1 @@
+bin\python.exe bin\pip.pyz install reportlab

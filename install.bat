@@ -1,1 +1,1 @@
-bin\python.exe bin\pip.pyz install reportlab wxpython
+bin\python.exe bin\pip.pyz install reportlab wxpython rasterio

@@ -1,22 +1,23 @@
-from tkinter import Tk, filedialog
+import wx
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 import os
 
+app = wx.App(False)
 
-# Open folder selection dialog
-root = Tk()
-root.withdraw()
-folder = filedialog.askdirectory(title="Select Folder to Save PDF")
+# Show folder selection dialog
+dlg = wx.DirDialog(None, "Select folder to save PDF", style=wx.DD_DEFAULT_STYLE)
+dlg.ShowModal()
+folder = dlg.GetPath()
+dlg.Destroy()
 
-# Build file path directly (no check)
+# Construct file path
 path = os.path.join(folder, "report.pdf")
 
-# Create PDF canvas
+# Create PDF
 c = canvas.Canvas(path, pagesize=A4)
 width, height = A4
 
-# Start writing text
 text = c.beginText(50, height - 50)
 text.setFont("Helvetica", 12)
 

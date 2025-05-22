@@ -1,1 +1,1 @@
-bin\python.exe bin\pip.pyz install reportlab
+bin\python.exe bin\pip.pyz install reportlab wxpython

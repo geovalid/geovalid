@@ -2,19 +2,20 @@ import wx
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 import os
+from datetime import datetime
 
 app = wx.App(False)
 
-# Show folder selection dialog
 dlg = wx.DirDialog(None, "Select folder to save PDF", style=wx.DD_DEFAULT_STYLE)
 dlg.ShowModal()
 folder = dlg.GetPath()
 dlg.Destroy()
 
-# Construct file path
-path = os.path.join(folder, "report.pdf")
+# Generate timestamp string
+timestamp = datetime.now().strftime("%Y%m%d%H%M")
+filename = f"Quality-Report-{timestamp}.pdf"
+path = os.path.join(folder, filename)
 
-# Create PDF
 c = canvas.Canvas(path, pagesize=A4)
 width, height = A4
 

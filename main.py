@@ -124,7 +124,7 @@ for filename in geotiff_files:
         quality_issues.append(f"{filename}: Error reading file - {str(e)}")
 
 # SUMMARY SECTION
-add_section_header("EXECUTIVE SUMMARY")
+add_section_header("OVERALL SUMMARY")
 add_line(f"Total GeoTIFF files analyzed: {len(geotiff_files)}")
 add_line(f"Total approximate area covered: {total_area/1000000:.2f} km²")
 add_line(f"Quality issues found: {len(quality_issues)}")
